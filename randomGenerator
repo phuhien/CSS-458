@@ -1,0 +1,13 @@
+# using python code
+# generate 100 number using the linear congruential method
+# using sample data from question 1- worksheet 7 
+x = 27
+a = 8
+c = 47
+m = 100
+
+for i in range(101):
+    temp = (a*x+c)%m
+    print "number "+str(i)+": " + str(temp)
+    x = temp
+    
