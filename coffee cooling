@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+from itertools import repeat
+import pylab
+import matplotlib.pyplot as plt
+
+plt.ylabel('Temperature')
+plt.xlabel('Time')
+plt.title('Comparing Coffee Cooling Time')
+
+# data given in class
+data = [[  0. ,  82.3,  68.8],
+       [  2. ,  78.5,  64.8],
+       [  4. ,  74.3,  62.1],
+       [  6. ,  70.7,  55.9],
+       [  8. ,  67.6,  57.7],
+       [ 10. ,  65. ,  55.9],
+       [ 12. ,  62.5,  53.9],
+       [ 14. ,  60.1,  52.3],
+       [ 16. ,  58.1,  50.8],
+       [ 18. ,  56.1,  49.5],
+       [ 20. ,  54.3,  48.1],
+       [ 22. ,  52.8,  46.8],
+       [ 24. ,  51.2,  45.9],
+       [ 26. ,  49.9,  44.8],
+       [ 28. ,  48.6,  43.7],
+       [ 30. ,  47.2,  42.6],
+       [ 32. ,  46.1,  41.7],
+       [ 34. ,  45. ,  40.8],
+       [ 36. ,  43.9,  39.9],
+       [ 38. ,  43. ,  39.3],
+       [ 40. ,  41.9,  38.6],
+       [ 42. ,  41. ,  37.7],
+       [ 44. ,  40.1,  37. ],
+       [ 46. ,  39.5,  36.4]]
+       
+dt = 0.005
+c = 0.3
+roomTemp = 23
+range_space = range(500)
+
+
+#getting the next temperature 
+def getNextTemp(currentTemp):
+    return currentTemp - c*(currentTemp - roomTemp)*dt
+
+#drawing the plot that immediately adds cream and the temp drops down from 90 to 85 degrees
+def AddingCreamImmediately():
+    currentTemp = 85
+    nextTemp = []
+    for i in range_space:
+        nextTemp.append(currentTemp)
+        currentTemp = getNextTemp(currentTemp)
+        
+    pylab.plot(range_space, nextTemp, 'r-', label = "cream added at very early", linewidth = 2)
+
+#drawing the plot that shows the best temperature for drinking coffee
+def bestCoffeeLine():
+    pylab.plot(range_space, list(repeat(75, 500)), 'b--',label = "best coffee tempreture", linewidth = 2)
+
+#drawing the plot that people tend to add cream after coffee temp drops down to 80
+def AddingCreamLate():
+    currentTemp = 90
+    nextTemp = []
+    
+    for i in range_space:
+        nextTemp.append(currentTemp)
+        currentTemp = getNextTemp(currentTemp)
+        if(len(nextTemp) > 0 and currentTemp < 80 and nextTemp[-1] > 80):
+            currentTemp = nextTemp[-1]-5
+            
+    pylab.plot(range_space, nextTemp, 'y-', label = "cream added at 80 degree", linewidth = 2)
+
+def plot_tea_data_given():
+    pylab.plot(zip(*data)[0], zip(*data)[1], color='orange', label='Black Tea')
+    pylab.plot(zip(*data)[0], zip(*data)[2], color='purple', label='Tea with Cream')
+     
+#drawing all plots  
+#plot_tea_data_given()   
+AddingCreamLate()
+bestCoffeeLine()        
+AddingCreamImmediately()
+pylab.legend()
+pylab.show()
+        
+
+ 
